@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kids Balance Lab</title>
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="manifest" href="manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- PWA Theme Color -->
+  <meta name="theme-color" content="#0d061f">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo-area">
+        <span class="logo-emoji">⚖️</span>
+        <h1 class="neon-title">KIDS BALANCE LAB</h1>
+      </div>
+      
+      <div class="header-controls">
+        <!-- Mode Switcher -->
+        <div class="toggle-container">
+          <button id="btn-challenge" class="toggle-btn active">Challenge Mode</button>
+          <button id="btn-sandbox" class="toggle-btn">Sandbox Mode</button>
+        </div>
+        
+        <!-- Action Buttons -->
+        <button id="btn-sound" class="icon-btn" title="Toggle Sound">🔊</button>
+        <button id="btn-reset" class="icon-btn" title="Reset Scale">🧹</button>
+        <button id="btn-clear-cache" class="icon-btn" title="Force Reload & Clear Cache">🔄</button>
+      </div>
+    </header>
+
+    <div class="main-layout">
+      <!-- Side panel -->
+      <aside class="side-panel" id="side-panel">
+        <!-- Dynamic Challenge selector -->
+        <div id="challenge-section" class="panel-section">
+          <h3>CHALLENGES</h3>
+          <div class="level-list" id="level-list">
+            <!-- Level buttons injected by JS -->
+          </div>
+          <div class="level-instructions-card">
+            <h4>MISSION INSTRUCTIONS</h4>
+            <p id="level-instructions">Select a level to start!</p>
+          </div>
+        </div>
+
+        <!-- Sandbox statistics selector -->
+        <div id="sandbox-section" class="panel-section hidden">
+          <h3>SANDBOX LAB</h3>
+          <p class="sandbox-intro">Drag any animal onto the hooks to see their weight tilt the scale! Try to balance them!</p>
+          
+          <div class="stats-card">
+            <h4>BALANCE STATUS</h4>
+            <div class="torque-meters">
+              <div class="torque-meter">
+                <span class="label">Left Torque</span>
+                <span id="left-torque-val" class="value neon-cyan-text">0</span>
+              </div>
+              <div class="torque-meter">
+                <span class="label">Right Torque</span>
+                <span id="right-torque-val" class="value neon-pink-text">0</span>
+              </div>
+            </div>
+            <div id="sandbox-status-text" class="status-alert">Unbalanced ⚖️</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Viewport area -->
+      <main class="canvas-container">
+        <canvas id="physics-canvas" width="1024" height="550"></canvas>
+        
+        <!-- Drag instructions helper overlay -->
+        <div class="drag-hint" id="drag-hint">Drag animals from shelf onto the yellow scale hooks!</div>
+
+        <!-- Success overlay banner -->
+        <div class="success-overlay hidden" id="success-overlay">
+          <div class="success-card">
+            <span class="success-emoji">🎉</span>
+            <h2>PERFECTLY BALANCED!</h2>
+            <p id="success-message">Excellent physics experiment!</p>
+            <button id="btn-next-level" class="btn-success">Next Challenge 🚀</button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Animal shelf -->
+    <footer class="shelf-wrapper">
+      <div class="shelf-header">
+        <span class="shelf-title">🧪 ANIMAL WEIGHTS SHELF</span>
+        <span class="shelf-desc">Touch & drag an animal to place it on a hook</span>
+      </div>
+      <div class="animal-shelf" id="animal-shelf">
+        <div class="shelf-item" data-animal="rabbit" style="--accent: #00f0ff;">
+          <div class="emoji-container">🐰</div>
+          <div class="item-meta">
+            <span class="name">Rabbit</span>
+            <span class="weight-badge">1 kg</span>
+          </div>
+        </div>
+        <div class="shelf-item" data-animal="fox" style="--accent: #ffaa00;">
+          <div class="emoji-container">🦊</div>
+          <div class="item-meta">
+            <span class="name">Fox</span>
+            <span class="weight-badge">2 kg</span>
+          </div>
+        </div>
+        <div class="shelf-item" data-animal="pig" style="--accent: #ff00ff;">
+          <div class="emoji-container">🐷</div>
+          <div class="item-meta">
+            <span class="name">Pig</span>
+            <span class="weight-badge">4 kg</span>
+          </div>
+        </div>
+        <div class="shelf-item" data-animal="lion" style="--accent: #ffef00;">
+          <div class="emoji-container">🦁</div>
+          <div class="item-meta">
+            <span class="name">Lion</span>
+            <span class="weight-badge">8 kg</span>
+          </div>
+        </div>
+        <div class="shelf-item" data-animal="elephant" style="--accent: #a000ff;">
+          <div class="emoji-container">🐘</div>
+          <div class="item-meta">
+            <span class="name">Elephant</span>
+            <span class="weight-badge">16 kg</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Include Matter.js from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js"></script>
+  <!-- Main Application Script -->
+  <script src="app.js"></script>
+</body>
+</html>
