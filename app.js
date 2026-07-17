@@ -780,15 +780,20 @@ function animate() {
   // Update Physics
   Engine.update(engine, 16.666);
 
-  // Force strict pivot angle limits to avoid scale flipping
+  // Calculate current torques
+  const { left, right } = calculateTorques();
+  updateUIStats(left, right);
+
+  // Smoothly interpolate the scale beam angle proportional to the torque difference
   const maxAngle = 0.35;
-  if (beam.angle > maxAngle) {
-    Body.setAngle(beam, maxAngle);
-    Body.setAngularVelocity(beam, 0);
-  } else if (beam.angle < -maxAngle) {
-    Body.setAngle(beam, -maxAngle);
-    Body.setAngularVelocity(beam, 0);
-  }
+  const torqueDiff = right - left; // Positive if tilted to the right
+  const targetAngle = Math.max(-maxAngle, Math.min(maxAngle, torqueDiff * 0.022)); // 0.022 sensitivity factor
+
+  const currentAngle = beam.angle;
+  const newAngle = currentAngle + (targetAngle - currentAngle) * 0.08; // 8% lerp adjustment per frame for smooth dampening
+  
+  Body.setAngle(beam, newAngle);
+  Body.setAngularVelocity(beam, 0);
 
   // Keep snapped animals rigidly locked onto hooks relative coordinates
   for (let i = 0; i < 6; i++) {
@@ -831,10 +836,6 @@ function animate() {
 
   // Floating celebration bubbles
   updateAndDrawParticles(ctx);
-
-  // Calculate and trigger balances
-  const { left, right } = calculateTorques();
-  updateUIStats(left, right);
 
   // Evaluate balance conditions
   if (left === right && left > 0) {
